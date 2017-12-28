@@ -1,0 +1,38 @@
+#include <SoftwareSerial.h>
+//使用软件串口，能讲数字口模拟成串口
+SoftwareSerial BT(8, 9);  //新建对象，接收脚为8，发送脚为9，hc06的RX和TX脚分别接在8和9上
+char val;
+int Buzzerpin=13;//13口接Buzzer的驱动
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(Buzzerpin,OUTPUT);
+  BT.begin(9600);  //设置波特率
+}
+void loop()
+{
+  val=BT.read();
+  if(val=='q')
+  {
+    unsigned char i,j,k(0);//通过k来控制蜂鸣器响的时间
+    while(k<10)//k的值代表了蜂鸣器响几组声音
+    {
+      for(i=0;i<80;i++)
+      {
+        digitalWrite(Buzzerpin,HIGH);
+        delay(1);
+        digitalWrite(Buzzerpin,LOW);
+        delay(1);
+      }
+      for(i=0;i<100;i++)
+      {
+        digitalWrite(Buzzerpin,HIGH);
+        delay(2);
+        digitalWrite(Buzzerpin,LOW);
+        delay(2);
+      }
+      k++;
+    }
+    Serial.println("Buzzer ON!");
+  }
+}
